@@ -16,6 +16,11 @@ class AsrSession {
         final = text
     }
 
+    /** Accepts raw audio data for processing. */
+    fun receiveAudio(data: ByteArray) {
+        // Audio ingestion would occur here in a real implementation.
+    }
+
     /** Returns the latest partial transcription, if any. */
     fun getPartial(): String? = partial
 
