@@ -22,7 +22,7 @@ class WearMessageListener(
 
     /** Stops the current recording session. */
     fun stopRecording() {
-        session?.getFinal()?.let { captions.onFinal(it) }
+        session?.consumeFinal()?.let { captions.onFinal(it) }
         session = null
     }
 
@@ -44,6 +44,6 @@ class WearMessageListener(
             s.getPartial()?.let { captions.onPartial(it) }
             frame = buffer.nextFrame()
         }
-        s.getFinal()?.let { captions.onFinal(it) }
+        s.consumeFinal()?.let { captions.onFinal(it) }
     }
 }
