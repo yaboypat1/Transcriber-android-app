@@ -6,13 +6,16 @@ import com.example.ingest.JitterBuffer.AudioPacket
 import com.example.session.AsrSession
 
 /**
- * Listens for messages coming from the wearable device and forwards
- * transcription updates to the [CaptionManager].
+ * Listens for audio coming from the wearable device. Incoming packets are
+ * buffered briefly to compensate for network jitter before being forwarded to
+ * the [AsrSession]. Interim and final transcripts are delivered through the
+ * provided [CaptionManager].
  */
 class WearMessageListener(
     private val captions: CaptionManager,
-    private val buffer: JitterBuffer
+    jitterMs: Long = 50L
 ) {
+    private val buffer = JitterBuffer(jitterMs)
     private var session: AsrSession? = null
 
     /** Starts a new recording session. */
@@ -42,6 +45,7 @@ class WearMessageListener(
         while (frame != null) {
             s.pushPcm(frame)
             s.getPartial()?.let { captions.onPartial(it) }
+            s.consumeFinal()?.let { captions.onFinal(it) }
             frame = buffer.nextFrame()
         }
         s.consumeFinal()?.let { captions.onFinal(it) }
