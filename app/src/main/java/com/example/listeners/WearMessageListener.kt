@@ -4,6 +4,8 @@ import com.example.captions.CaptionManager
 import com.example.ingest.JitterBuffer
 import com.example.ingest.JitterBuffer.AudioPacket
 import com.example.session.AsrSession
+import com.example.storage.TranscriptRepository
+import com.example.storage.TranscriptSegment
 
 /**
  * Listens for audio coming from the wearable device. Incoming packets are
@@ -13,6 +15,7 @@ import com.example.session.AsrSession
  */
 class WearMessageListener(
     private val captions: CaptionManager,
+    private val repository: TranscriptRepository,
     jitterMs: Long = 50L
 ) {
     private val buffer = JitterBuffer(jitterMs)
@@ -25,7 +28,10 @@ class WearMessageListener(
 
     /** Stops the current recording session. */
     fun stopRecording() {
-        session?.consumeFinal()?.let { captions.onFinal(it) }
+        session?.consumeFinal()?.let {
+            captions.onFinal(it)
+            repository.insertSegment(TranscriptSegment(text = it))
+        }
         session = null
     }
 
@@ -45,9 +51,15 @@ class WearMessageListener(
         while (frame != null) {
             s.pushPcm(frame)
             s.getPartial()?.let { captions.onPartial(it) }
-            s.consumeFinal()?.let { captions.onFinal(it) }
+            s.consumeFinal()?.let {
+                captions.onFinal(it)
+                repository.insertSegment(TranscriptSegment(text = it))
+            }
             frame = buffer.nextFrame()
         }
-        s.consumeFinal()?.let { captions.onFinal(it) }
+        s.consumeFinal()?.let {
+            captions.onFinal(it)
+            repository.insertSegment(TranscriptSegment(text = it))
+        }
     }
 }
