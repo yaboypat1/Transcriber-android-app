@@ -31,4 +31,14 @@ class AsrSession {
 
     /** Returns the final transcription, if available. */
     fun getFinal(): String? = final
+
+    /**
+     * Returns the final transcription and clears it so the caller only
+     * receives each final result once.
+     */
+    fun consumeFinal(): String? {
+        val result = final
+        final = null
+        return result
+    }
 }
