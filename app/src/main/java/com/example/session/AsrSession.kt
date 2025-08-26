@@ -5,6 +5,11 @@ package com.example.session
  * this would interface with the speech recognition service.
  */
 class AsrSession {
+    companion object {
+        init {
+            System.loadLibrary("asr")
+        }
+    }
     private var partial: String? = null
     private var final: String? = null
 
@@ -16,8 +21,8 @@ class AsrSession {
         final = text
     }
 
-    /** Accepts raw audio data for processing. */
-    fun receiveAudio(data: ByteArray) {
+    /** Accepts raw PCM audio data for processing. */
+    fun pushPcm(data: ByteArray) {
         // Audio ingestion would occur here in a real implementation.
     }
 
