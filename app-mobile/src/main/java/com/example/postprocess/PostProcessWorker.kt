@@ -60,10 +60,11 @@ class PostProcessWorker(
             }
         }
 
-    private fun updateTranscript(sessionId: String, text: String) {
-        val repo = TranscriptRepository(applicationContext)
-        repo.insertSegment(TranscriptSegment(text = text))
-    }
+    private suspend fun updateTranscript(sessionId: String, text: String) =
+        withContext(Dispatchers.IO) {
+            val repo = TranscriptRepository(applicationContext)
+            repo.insertSegment(TranscriptSegment(text = text))
+        }
 
     companion object {
         private const val KEY_SESSION_ID = "session_id"
