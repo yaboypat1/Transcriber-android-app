@@ -32,9 +32,11 @@ class WearMessageListener(
 
     /** Stops the current recording session. */
     fun stopRecording() {
-        session?.consumeFinal()?.let {
-            captions.onFinal(it)
-            scope.launch { repository.insertSegment(TranscriptSegment(text = it)) }
+        session?.use { s ->
+            s.consumeFinal()?.let {
+                captions.onFinal(it)
+                scope.launch { repository.insertSegment(TranscriptSegment(text = it)) }
+            }
         }
         session = null
     }

@@ -1,10 +1,12 @@
 package com.example.session
 
+import java.io.Closeable
+
 /**
  * Thin wrapper around the native ASR engine. Raw PCM audio is pushed into the
  * engine and partial/final transcripts are retrieved via JNI bindings.
  */
-class AsrSession {
+class AsrSession : Closeable {
     companion object {
         init {
             System.loadLibrary("asr")
@@ -25,16 +27,11 @@ class AsrSession {
     fun consumeFinal(): String? = nativeFinal(handle)
 
     /** Releases the native resources backing this session. */
-    fun close() {
+    override fun close() {
         if (handle != 0L) {
             nativeClose(handle)
             handle = 0L
         }
-    }
-
-    @Suppress("deprecation")
-    protected fun finalize() {
-        close()
     }
 
     private external fun nativeCreate(): Long
