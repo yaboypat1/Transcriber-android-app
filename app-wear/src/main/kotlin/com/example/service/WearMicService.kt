@@ -11,7 +11,6 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.example.ui.MicTileService
-import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
@@ -59,13 +58,14 @@ class WearMicService : Service(), MessageClient.OnMessageReceivedListener {
         super.onCreate()
         createNotificationChannel()
         messageClient.addListener(this)
-        try {
-            val nodes = Tasks.await(nodeClient.connectedNodes)
-            nodeId = nodes.firstOrNull()?.id
-            packetQueue.setConnected(nodeId != null)
-        } catch (e: Exception) {
-            packetQueue.setConnected(false)
-        }
+        nodeClient.connectedNodes
+            .addOnSuccessListener { nodes ->
+                nodeId = nodes.firstOrNull()?.id
+                packetQueue.setConnected(nodeId != null)
+            }
+            .addOnFailureListener {
+                packetQueue.setConnected(false)
+            }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
