@@ -6,6 +6,9 @@ import com.example.ingest.JitterBuffer.AudioPacket
 import com.example.session.AsrSession
 import com.example.storage.TranscriptRepository
 import com.example.storage.TranscriptSegment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Listens for audio coming from the wearable device. Incoming packets are
@@ -20,6 +23,7 @@ class WearMessageListener(
 ) {
     private val buffer = JitterBuffer(jitterMs)
     private var session: AsrSession? = null
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     /** Starts a new recording session. */
     fun startRecording() {
@@ -30,7 +34,7 @@ class WearMessageListener(
     fun stopRecording() {
         session?.consumeFinal()?.let {
             captions.onFinal(it)
-            repository.insertSegment(TranscriptSegment(text = it))
+            scope.launch { repository.insertSegment(TranscriptSegment(text = it)) }
         }
         session = null
     }
@@ -53,13 +57,13 @@ class WearMessageListener(
             s.getPartial()?.let { captions.onPartial(it) }
             s.consumeFinal()?.let {
                 captions.onFinal(it)
-                repository.insertSegment(TranscriptSegment(text = it))
+                scope.launch { repository.insertSegment(TranscriptSegment(text = it)) }
             }
             frame = buffer.nextFrame()
         }
         s.consumeFinal()?.let {
             captions.onFinal(it)
-            repository.insertSegment(TranscriptSegment(text = it))
+            scope.launch { repository.insertSegment(TranscriptSegment(text = it)) }
         }
     }
 }

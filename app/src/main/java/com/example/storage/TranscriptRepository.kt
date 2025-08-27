@@ -10,10 +10,10 @@ class TranscriptRepository(context: Context) {
     @Dao
     interface TranscriptDao {
         @Insert
-        fun insert(segment: TranscriptSegment)
+        suspend fun insert(segment: TranscriptSegment)
 
         @Query("SELECT * FROM transcript_segment ORDER BY id")
-        fun getAll(): List<TranscriptSegment>
+        suspend fun getAll(): List<TranscriptSegment>
     }
 
     @Database(entities = [TranscriptSegment::class], version = 1)
@@ -24,12 +24,13 @@ class TranscriptRepository(context: Context) {
     private val dao: TranscriptDao = Room.databaseBuilder(
         context.applicationContext,
         TranscriptDatabase::class.java,
-        "transcripts.db"
-    ).allowMainThreadQueries().build().transcriptDao()
+        "transcripts.db",
+    ).build().transcriptDao()
 
     /** Inserts a finalized transcript segment. */
-    fun insertSegment(segment: TranscriptSegment) = dao.insert(segment)
+    suspend fun insertSegment(segment: TranscriptSegment) = dao.insert(segment)
 
     /** Returns all stored transcript segments. */
-    fun getSegments(): List<TranscriptSegment> = dao.getAll()
+    suspend fun getSegments(): List<TranscriptSegment> = dao.getAll()
 }
+
