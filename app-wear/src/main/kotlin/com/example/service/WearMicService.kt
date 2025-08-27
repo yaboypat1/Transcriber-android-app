@@ -16,6 +16,7 @@ import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.PutDataRequest
 import java.nio.ByteBuffer
+import com.example.service.OpusPacketQueue
 
 /**
  * Service responsible for capturing audio from the watch microphone. The
@@ -44,27 +45,31 @@ class WearMicService : Service(), MessageClient.OnMessageReceivedListener {
     private val messageClient by lazy { Wearable.getMessageClient(this) }
     private val nodeClient by lazy { Wearable.getNodeClient(this) }
     private var nodeId: String? = null
-    private val packetQueue = OpusPacketQueue { seq, data ->
-        val id = nodeId
-        if (id != null) {
-            val payload = ByteBuffer.allocate(4 + data.size).putInt(seq).put(data).array()
-            messageClient.sendMessage(id, PATH_AUDIO, payload)
-        } else {
-            packetQueue.setConnected(false)
-        }
-    }
+    private var packetQueue: OpusPacketQueue? = null
 
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        
+        // Initialize packetQueue after onCreate to avoid circular reference
+        packetQueue = OpusPacketQueue { seq, data ->
+            val id = nodeId
+            if (id != null) {
+                val payload = ByteBuffer.allocate(4 + data.size).putInt(seq).put(data).array()
+                messageClient.sendMessage(id, PATH_AUDIO, payload)
+            } else {
+                packetQueue?.setConnected(false)
+            }
+        }
+        
         messageClient.addListener(this)
         nodeClient.connectedNodes
             .addOnSuccessListener { nodes ->
                 nodeId = nodes.firstOrNull()?.id
-                packetQueue.setConnected(nodeId != null)
+                packetQueue?.setConnected(nodeId != null)
             }
             .addOnFailureListener {
-                packetQueue.setConnected(false)
+                packetQueue?.setConnected(false)
             }
     }
 
@@ -103,10 +108,10 @@ class WearMicService : Service(), MessageClient.OnMessageReceivedListener {
 
     /** Queue an Opus packet for transmission to the phone. */
     fun sendOpusPacket(data: ByteArray) {
-        packetQueue.queue(data)
+        packetQueue?.queue(data)
         // For large bursts fall back to the DataClient which persists data.
-        if (packetQueue.size() > 50) {
-            val combined = packetQueue.pendingPackets().fold(ByteArray(0)) { acc, arr ->
+        if ((packetQueue?.size() ?: 0) > 50) {
+            val combined = (packetQueue?.pendingPackets() ?: emptyList()).fold(ByteArray(0)) { acc, arr ->
                 acc + arr
             }
             val request = PutDataRequest.create(PATH_AUDIO).setData(combined).setUrgent()
@@ -158,7 +163,7 @@ class WearMicService : Service(), MessageClient.OnMessageReceivedListener {
     override fun onDestroy() {
         super.onDestroy()
         messageClient.removeListener(this)
-        packetQueue.setConnected(false)
+        packetQueue?.setConnected(false)
         isRunning = false
         MicTileService.requestUpdate(this)
     }
@@ -166,7 +171,7 @@ class WearMicService : Service(), MessageClient.OnMessageReceivedListener {
     override fun onMessageReceived(event: MessageEvent) {
         if (event.path == PATH_ACK) {
             val seq = ByteBuffer.wrap(event.data).int
-            packetQueue.ack(seq)
+            packetQueue?.ack(seq)
         }
     }
 

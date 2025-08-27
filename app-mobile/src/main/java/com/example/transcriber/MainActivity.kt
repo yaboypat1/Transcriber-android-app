@@ -420,10 +420,10 @@ fun TranscriptItem(transcript: TranscriptSegment) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 transcript.language?.let { lang ->
-                    Chip(
+                    AssistChip(
                         onClick = { },
                         label = { Text(lang.uppercase(), fontSize = 12.sp) },
-                        colors = ChipDefaults.chipColors(
+                        colors = AssistChipDefaults.assistChipColors(
                             containerColor = MaterialTheme.colorScheme.secondaryContainer
                         )
                     )
@@ -438,7 +438,7 @@ fun TranscriptItem(transcript: TranscriptSegment) {
             
             transcript.translatedText?.let { translated ->
                 Spacer(modifier = Modifier.height(8.dp))
-                Divider()
+                HorizontalDivider()
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = translated,

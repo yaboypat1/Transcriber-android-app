@@ -41,13 +41,26 @@ repositories {
 
 dependencies {
     implementation(project(":app"))
-    implementation("com.google.android.gms:play-services-wearable:18.0.0")
-    implementation("androidx.wear.tiles:tiles:1.2.0")
-    implementation("androidx.core:core-ktx:1.12.0")
     
-    // Wear OS Tiles dependencies
-    implementation("androidx.wear.tiles:tiles-material:1.2.0")
-    implementation("com.google.android.horologist:horologist-tiles:0.4.8")
+    // Core Wear OS dependencies - using compatible versions
+    implementation("androidx.wear:wear:1.3.0")
+    implementation("androidx.wear.tiles:tiles:1.4.0")
+    // ProtoLayout (modern Tiles UI API)
+    implementation("androidx.wear.protolayout:protolayout:1.0.0")
+    implementation("androidx.wear.protolayout:protolayout-material:1.0.0")
+    
+    // Google Play Services for Wear
+    implementation("com.google.android.gms:play-services-wearable:18.1.0")
+    
+    // AndroidX dependencies
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-service:2.7.0")
+    
+    // Concurrent futures to create ListenableFuture without Guava dependency
+    implementation("androidx.concurrent:concurrent-futures:1.2.0")
     
     // Testing dependencies
     testImplementation(kotlin("test"))
