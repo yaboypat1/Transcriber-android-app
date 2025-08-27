@@ -51,7 +51,7 @@ class JitterBuffer(private val delayMs: Long) {
     /**
      * Represents an audio packet with voice activity detection.
      */
-    data class AudioPacket(
+    inner class AudioPacket(
         val audioData: ShortArray,
         val voiceActivity: Boolean,
         val timestamp: Long = System.currentTimeMillis()

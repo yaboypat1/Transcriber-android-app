@@ -16,6 +16,15 @@ android {
         testInstrumentationRunner = "com.example.transcriber.CustomTestRunner"
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     sourceSets {
         getByName("main") {
             java.srcDir("src/main/kotlin")

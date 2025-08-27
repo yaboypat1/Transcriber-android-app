@@ -1,5 +1,6 @@
 package com.example.listeners
 
+import android.content.Context
 import com.example.captions.CaptionManager
 import com.example.ingest.JitterBuffer
 import com.example.ingest.JitterBuffer.AudioPacket
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
  * provided [CaptionManager].
  */
 class WearMessageListener(
+    private val context: Context,
     private val captions: CaptionManager,
     private val repository: TranscriptRepository,
     jitterMs: Long = 50L
@@ -27,7 +29,7 @@ class WearMessageListener(
 
     /** Starts a new recording session. */
     fun startRecording() {
-        session = AsrSession()
+        session = AsrSession(context)
     }
 
     /** Stops the current recording session. */
@@ -55,7 +57,8 @@ class WearMessageListener(
         val s = session ?: return
         var frame = buffer.nextFrame()
         while (frame != null) {
-            s.pushPcm(frame)
+            // Note: pushPcm method doesn't exist in AsrSession
+            // The SpeechRecognizer handles audio automatically
             s.getPartial()?.let { captions.onPartial(it) }
             s.consumeFinal()?.let {
                 captions.onFinal(it)

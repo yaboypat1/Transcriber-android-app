@@ -1,6 +1,8 @@
 package com.example.session
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -88,7 +90,7 @@ class AsrSession(private val context: Context) : Closeable {
     fun startListening() {
         if (speechRecognizer == null || isListening) return
         
-        val intent = RecognizerIntent().apply {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
             putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)

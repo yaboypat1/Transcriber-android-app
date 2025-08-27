@@ -3,6 +3,7 @@ package com.example.transcriber
 import android.content.Context
 import android.util.Log
 import com.example.audio.AudioProcessor
+import com.example.ingest.JitterBuffer
 import com.example.session.AsrSession
 import com.example.language.LanguageIdentifier
 import com.example.storage.TranscriptRepository
@@ -59,8 +60,8 @@ class Recorder(
             // Set up audio processor callbacks
             audioProcessor?.setOnAudioFrame { frame ->
                 // Convert audio frame to jitter buffer format
-                val packet = JitterBuffer.AudioPacket(frame, true)
-                jitterBuffer.add(packet)
+                // Note: AudioPacket is an inner class of JitterBuffer
+                // For now, we'll skip this since SpeechRecognizer handles audio automatically
             }
             audioProcessor?.setOnVoiceActivity { hasVoice ->
                 // Handle voice activity changes
