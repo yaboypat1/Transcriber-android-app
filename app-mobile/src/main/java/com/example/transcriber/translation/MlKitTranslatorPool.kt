@@ -11,6 +11,15 @@ import com.google.mlkit.nl.translate.TranslatorOptions
  * translations entirely on-device.
  */
 object MlKitTranslatorPool {
+    private var targetLanguage: String = "en"
+
+    /**
+     * Update the default target language used for translation.
+     */
+    fun setTargetLanguage(languageCode: String) {
+        targetLanguage = languageCode
+    }
+
     private suspend fun getTranslator(src: String, dst: String): Translator? {
         val srcLang = TranslateLanguage.fromLanguageTag(src)
         val dstLang = TranslateLanguage.fromLanguageTag(dst)
@@ -36,5 +45,13 @@ object MlKitTranslatorPool {
         // Note: await() is not available in this context
         // For now, return a placeholder translation
         return "[Translation: $text]"
+    }
+
+    /**
+     * Translate [text] from [src] language to the previously configured
+     * [targetLanguage].
+     */
+    suspend fun translate(src: String, text: String): String {
+        return translate(src, targetLanguage, text)
     }
 }
