@@ -9,7 +9,7 @@ import com.example.session.AsrSession
 import com.example.language.LanguageIdentifier
 import com.example.storage.TranscriptRepository
 import com.example.storage.TranscriptSegment
-import com.example.translation.MlKitTranslatorPool
+import com.example.transcriber.translation.MlKitTranslatorPool
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable

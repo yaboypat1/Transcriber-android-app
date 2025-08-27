@@ -34,7 +34,7 @@ import com.example.language.LanguageIdentifier
 import com.example.session.AsrSession
 import com.example.storage.TranscriptRepository
 import com.example.storage.TranscriptSegment
-import com.example.translation.MlKitTranslatorPool
+import com.example.transcriber.translation.MlKitTranslatorPool
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -422,12 +422,11 @@ fun TranscriptItem(transcript: TranscriptSegment) {
                 transcript.language?.let { lang ->
                     Chip(
                         onClick = { },
+                        label = { Text(lang.uppercase(), fontSize = 12.sp) },
                         colors = ChipDefaults.chipColors(
                             containerColor = MaterialTheme.colorScheme.secondaryContainer
                         )
-                    ) {
-                        Text(lang.uppercase(), fontSize = 12.sp)
-                    }
+                    )
                 }
                 
                 Text(
