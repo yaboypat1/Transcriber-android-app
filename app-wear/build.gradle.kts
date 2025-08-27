@@ -31,6 +31,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":app"))
     implementation("com.google.android.gms:play-services-wearable:18.0.0")
     implementation("androidx.wear.tiles:tiles:1.2.0")
     implementation("androidx.core:core-ktx:1.12.0")

@@ -1,46 +1,35 @@
 package com.example.captions
 
-import java.util.concurrent.ConcurrentLinkedQueue
+/**
+ * Manages live captions for real-time transcription display.
+ * This interface allows for different caption implementations
+ * (e.g., overlay, notification, accessibility).
+ */
+interface CaptionManager {
+    /**
+     * Called when a partial transcription is available.
+     * This can be used to show live, updating captions.
+     */
+    fun onPartial(text: String)
+
+    /**
+     * Called when a final transcription segment is available.
+     * This can be used to show final captions and trigger
+     * storage or translation.
+     */
+    fun onFinal(text: String)
+}
 
 /**
- * Coordinates caption updates between UI and persistent storage.
- *
- * @param uiUpdater invoked with every partial result to update the live captions
- * @param storage invoked with each final result to be persisted by a background job
+ * Simple caption manager that logs transcriptions.
+ * Replace this with your preferred caption implementation.
  */
-class CaptionManager(
-    private val uiUpdater: (String) -> Unit,
-    private val storage: (String) -> Unit
-) {
-    private val pendingFinal = ConcurrentLinkedQueue<String>()
-
-    /**
-     * Called when a partial transcription is available. The partial text
-     * is forwarded directly to the UI updater for live captioning.
-     */
-    fun onPartial(text: String) {
-        uiUpdater(text)
+class LoggingCaptionManager : CaptionManager {
+    override fun onPartial(text: String) {
+        println("Partial: $text")
     }
 
-    /**
-     * Called when a final transcription is produced. The text is queued
-     * for persistence and forwarded to the provided storage callback.
-     */
-    fun onFinal(text: String) {
-        pendingFinal.add(text)
-        storage(text)
-    }
-
-    /**
-     * Exposes any queued final captions. Useful for testing or when the
-     * storage job wants to drain items manually.
-     */
-    fun drainFinal(): List<String> {
-        val result = mutableListOf<String>()
-        while (true) {
-            val next = pendingFinal.poll() ?: break
-            result.add(next)
-        }
-        return result
+    override fun onFinal(text: String) {
+        println("Final: $text")
     }
 }
