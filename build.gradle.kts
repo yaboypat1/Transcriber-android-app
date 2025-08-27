@@ -1,20 +1,17 @@
-plugins {
-    kotlin("jvm") version "2.0.21" apply false
-}
-
-subprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-
+buildscript {
     repositories {
+        google()
         mavenCentral()
     }
-
-    // Skip compilation; source files are illustrative only
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        enabled = false
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.2.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22")
     }
+}
 
-    tasks.withType<Test> {
-        useJUnitPlatform()
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
     }
 }

@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    id("kotlin-android")
 }
 
 android {
@@ -37,7 +37,11 @@ repositories {
 
 dependencies {
     implementation("com.google.mlkit:common:18.10.0")
+    implementation("com.google.mlkit:translate:17.0.1")
     implementation("com.google.android.gms:play-services-wearable:18.0.0")
+    implementation("androidx.lifecycle:lifecycle-service:2.7.0")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.core:core-ktx:1.12.0")
     testImplementation(kotlin("test"))
 }
 
