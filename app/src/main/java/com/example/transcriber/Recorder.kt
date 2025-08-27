@@ -1,5 +1,9 @@
 package com.example.transcriber
 
+import com.example.session.AsrSession
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+
 /**
  * Handles audio recording and streaming frames into the ASR engine.
  */
@@ -21,7 +25,10 @@ class Recorder(private val jitterBuffer: JitterBuffer) {
         val frame = jitterBuffer.nextFrame() ?: return
         val asr = session ?: return
 
-        asr.pushPcm(frame)
+        // Convert 16-bit PCM samples to a byte array for the session API
+        val byteBuffer = ByteBuffer.allocate(frame.size * 2).order(ByteOrder.LITTLE_ENDIAN)
+        frame.forEach { sample -> byteBuffer.putShort(sample) }
+        asr.pushPcm(byteBuffer.array())
 
         // Retrieve partial result after each frame
         val partial = asr.getPartial()
@@ -31,7 +38,7 @@ class Recorder(private val jitterBuffer: JitterBuffer) {
 
         // On voice activity end, fetch finalised text
         if (jitterBuffer.voiceActivityEnded()) {
-            val finalText = asr.getFinal()
+            val finalText = asr.consumeFinal()
             if (finalText != null) {
                 handleFinal(finalText)
             }
