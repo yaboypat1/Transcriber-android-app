@@ -9,6 +9,12 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.example.session.AsrSession
+import com.example.storage.TranscriptRepository
+import com.example.storage.TranscriptSegment
+import java.io.File
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Background worker that revisits recorded sessions with a heavier ASR model
@@ -31,18 +37,32 @@ class PostProcessWorker(
         }
     }
 
-    private suspend fun fetchSessionAudio(sessionId: String): ByteArray {
-        // TODO: Retrieve stored PCM audio for the given session ID.
-        return ByteArray(0)
-    }
+    private suspend fun fetchSessionAudio(sessionId: String): ByteArray =
+        withContext(Dispatchers.IO) {
+            val file = File(applicationContext.filesDir, "$sessionId.pcm")
+            if (file.exists()) file.readBytes() else ByteArray(0)
+        }
 
-    private suspend fun runHeavyAsr(audio: ByteArray): String {
-        // TODO: Execute a higher accuracy ASR model over the audio.
-        return ""
-    }
+    private suspend fun runHeavyAsr(audio: ByteArray): String =
+        withContext(Dispatchers.Default) {
+            val session = AsrSession()
+            try {
+                session.pushPcm(audio)
+                val builder = StringBuilder()
+                while (true) {
+                    val segment = session.consumeFinal() ?: break
+                    if (builder.isNotEmpty()) builder.append(' ')
+                    builder.append(segment)
+                }
+                if (builder.isNotEmpty()) builder.toString() else session.getPartial().orEmpty()
+            } finally {
+                session.close()
+            }
+        }
 
     private fun updateTranscript(sessionId: String, text: String) {
-        // TODO: Persist the refined transcript text back to storage.
+        val repo = TranscriptRepository(applicationContext)
+        repo.insertSegment(TranscriptSegment(text = text))
     }
 
     companion object {
