@@ -121,7 +121,6 @@ class EnhancedCaptionManager(
         onErrorCallback = callback
     }
 }
-
 /**
  * Simple caption manager that logs transcriptions.
  * Replace this with your preferred caption implementation.
@@ -143,3 +142,4 @@ class LoggingCaptionManager : CaptionManager {
         println("Error: $error")
     }
 }
+

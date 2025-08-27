@@ -57,8 +57,9 @@ class WearMessageListener(
         val s = session ?: return
         var frame = buffer.nextFrame()
         while (frame != null) {
-            // Note: pushPcm method doesn't exist in AsrSession
-            // The SpeechRecognizer handles audio automatically
+            // Audio capture and streaming are handled internally by AsrSession
+            // (via SpeechRecognizer). Here we simply poll for partial/final
+            // results while draining buffered frames to maintain timing.
             s.getPartial()?.let { captions.onPartial(it) }
             s.consumeFinal()?.let {
                 captions.onFinal(it)

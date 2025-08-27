@@ -44,19 +44,23 @@ class WearMicService : Service(), MessageClient.OnMessageReceivedListener {
     private val messageClient by lazy { Wearable.getMessageClient(this) }
     private val nodeClient by lazy { Wearable.getNodeClient(this) }
     private var nodeId: String? = null
-    private val packetQueue = OpusPacketQueue { seq, data ->
-        val id = nodeId
-        if (id != null) {
-            val payload = ByteBuffer.allocate(4 + data.size).putInt(seq).put(data).array()
-            messageClient.sendMessage(id, PATH_AUDIO, payload)
-        } else {
-            packetQueue.setConnected(false)
-        }
-    }
+    // Initialized in onCreate to avoid self-referential capture during property init
+    private lateinit var packetQueue: OpusPacketQueue
 
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        // Initialize the packet queue here to avoid recursive type inference on property init
+        packetQueue = OpusPacketQueue { seq: Int, data: ByteArray ->
+            val id = nodeId
+            if (id != null) {
+                val payload = ByteBuffer.allocate(4 + data.size).putInt(seq).put(data).array()
+                messageClient.sendMessage(id, PATH_AUDIO, payload)
+            } else {
+                // If not connected yet, mark as disconnected to prevent sends
+                packetQueue.setConnected(false)
+            }
+        }
         messageClient.addListener(this)
         nodeClient.connectedNodes
             .addOnSuccessListener { nodes ->

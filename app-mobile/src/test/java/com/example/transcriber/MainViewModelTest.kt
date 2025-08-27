@@ -52,6 +52,7 @@ class MainViewModelTest {
         )
 
         viewModel.addTranscript(transcript)
+        advanceUntilIdle()
 
         val transcripts = viewModel.transcripts.first()
         assertEquals(1, transcripts.size)
@@ -111,12 +112,14 @@ class MainViewModelTest {
         
         viewModel.addTranscript(transcript1)
         viewModel.addTranscript(transcript2)
+        advanceUntilIdle()
 
         // Verify transcripts were added
         assertEquals(2, viewModel.transcripts.first().size)
 
         // Clear all transcripts
         viewModel.clearTranscripts()
+        advanceUntilIdle()
 
         // Verify transcripts were cleared
         assertTrue(viewModel.transcripts.first().isEmpty())
@@ -129,12 +132,14 @@ class MainViewModelTest {
         
         viewModel.addTranscript(transcript1)
         viewModel.addTranscript(transcript2)
+        advanceUntilIdle()
 
         // Verify both transcripts are present
         assertEquals(2, viewModel.transcripts.first().size)
 
         // Delete first transcript
         viewModel.deleteTranscript(transcript1)
+        advanceUntilIdle()
 
         // Verify only second transcript remains
         val remainingTranscripts = viewModel.transcripts.first()
@@ -152,11 +157,13 @@ class MainViewModelTest {
         viewModel.addTranscript(transcript1)
         viewModel.addTranscript(transcript2)
         viewModel.addTranscript(transcript3)
+        advanceUntilIdle()
 
         assertEquals(3, viewModel.transcripts.first().size)
 
         // Delete middle transcript
         viewModel.deleteTranscript(transcript2)
+        advanceUntilIdle()
 
         val remaining = viewModel.transcripts.first()
         assertEquals(2, remaining.size)
@@ -210,6 +217,7 @@ class MainViewModelTest {
         viewModel.addTranscript(transcript1)
         viewModel.addTranscript(transcript2)
         viewModel.addTranscript(transcript3)
+        advanceUntilIdle()
 
         val transcripts = viewModel.transcripts.first()
         assertEquals(3, transcripts.size)

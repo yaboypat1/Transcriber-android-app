@@ -42,7 +42,7 @@ class OpusPacketQueue(private val sender: (Int, ByteArray) -> Unit) {
         }
     }
 
-    /** Number of packets still waiting for acknowledgement. */
+    /** Number of packets still waiting for acknowledgment. */
     fun size(): Int = pending.size
 
     /** Snapshot of all pending packet payloads. */
