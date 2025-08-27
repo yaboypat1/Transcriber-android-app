@@ -45,8 +45,7 @@ class PostProcessWorker(
 
     private suspend fun runHeavyAsr(audio: ByteArray): String =
         withContext(Dispatchers.Default) {
-            val session = AsrSession()
-            try {
+            AsrSession().use { session ->
                 session.pushPcm(audio)
                 val builder = StringBuilder()
                 while (true) {
@@ -55,8 +54,6 @@ class PostProcessWorker(
                     builder.append(segment)
                 }
                 if (builder.isNotEmpty()) builder.toString() else session.getPartial().orEmpty()
-            } finally {
-                session.close()
             }
         }
 
