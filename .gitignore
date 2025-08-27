@@ -1,3 +1,6 @@
 .gradle/
 build/
 */build/
+bin/
+*/bin/
+.kotlin/
