@@ -2,6 +2,8 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        // Explicit Google Maven endpoint as a fallback
+        maven(url = "https://dl.google.com/dl/android/maven2/")
         gradlePluginPortal()
     }
 }
@@ -11,6 +13,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // Explicit Google Maven endpoint as a fallback
+        maven(url = "https://dl.google.com/dl/android/maven2/")
     }
 }
 

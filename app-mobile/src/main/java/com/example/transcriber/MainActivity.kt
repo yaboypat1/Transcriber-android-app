@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.viewModels
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
@@ -52,6 +53,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var repository: TranscriptRepository
     private lateinit var captionManager: EnhancedCaptionManager
     private val scope = CoroutineScope(Dispatchers.Main)
+    private val mainViewModel: MainViewModel by viewModels()
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -145,6 +147,7 @@ class MainActivity : ComponentActivity() {
         try {
             audioProcessor.startRecording()
             asrSession.startListening()
+            mainViewModel.setRecordingState(true)
             Log.d(TAG, "Transcription started")
             Toast.makeText(this, "Transcription started", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
@@ -157,6 +160,7 @@ class MainActivity : ComponentActivity() {
         try {
             audioProcessor.stopRecording()
             asrSession.stopListening()
+            mainViewModel.setRecordingState(false)
             Log.d(TAG, "Transcription stopped")
             Toast.makeText(this, "Transcription stopped", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
@@ -420,10 +424,17 @@ fun TranscriptItem(transcript: TranscriptSegment) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 transcript.language?.let { lang ->
+<<<<<<< HEAD
                     AssistChip(
                         onClick = { },
                         label = { Text(lang.uppercase(), fontSize = 12.sp) },
                         colors = AssistChipDefaults.assistChipColors(
+=======
+                    SuggestionChip(
+                        onClick = {},
+                        label = { Text(lang.uppercase(), fontSize = 12.sp) },
+                        colors = SuggestionChipDefaults.suggestionChipColors(
+>>>>>>> fb9df69ed72c58ee2bc168e83960bedd7bd752db
                             containerColor = MaterialTheme.colorScheme.secondaryContainer
                         )
                     )

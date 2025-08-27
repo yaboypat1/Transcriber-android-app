@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -41,6 +41,7 @@ repositories {
 
 dependencies {
     implementation(project(":app"))
+<<<<<<< HEAD
     
     // Core Wear OS dependencies - using compatible versions
     implementation("androidx.wear:wear:1.3.0")
@@ -61,6 +62,16 @@ dependencies {
     
     // Concurrent futures to create ListenableFuture without Guava dependency
     implementation("androidx.concurrent:concurrent-futures:1.2.0")
+=======
+    implementation("com.google.android.gms:play-services-wearable:18.0.0")
+    // Wear Tiles API
+    implementation("androidx.wear.tiles:tiles:1.3.0")
+    implementation("androidx.wear.tiles:tiles-material:1.3.0")
+    implementation("androidx.core:core-ktx:1.12.0")
+    
+    // Google Guava for ListenableFuture
+    implementation("com.google.guava:guava:32.1.3-android")
+>>>>>>> fb9df69ed72c58ee2bc168e83960bedd7bd752db
     
     // Testing dependencies
     testImplementation(kotlin("test"))
