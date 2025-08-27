@@ -10,13 +10,17 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.google.android.gms.wearable.MessageClient
+import com.google.android.gms.wearable.MessageEvent
+import com.google.android.gms.wearable.Wearable
+import java.nio.ByteBuffer
 
 /**
  * Foreground service used on the phone to receive audio from the watch. The
  * service exposes persistent mute and stop actions and is marked with the
  * microphone foreground-service type for Android 14+ compliance.
  */
-class PhoneMicService : Service() {
+class PhoneMicService : Service(), MessageClient.OnMessageReceivedListener {
     companion object {
         const val ACTION_START = "com.example.service.action.START"
         const val ACTION_STOP = "com.example.service.action.STOP"
@@ -24,13 +28,18 @@ class PhoneMicService : Service() {
 
         private const val CHANNEL_ID = "phone_mic"
         private const val NOTIFICATION_ID = 1
+        private const val PATH_AUDIO = "/audio"
+        private const val PATH_ACK = "/ack"
     }
 
     private var muted = false
 
+    private val messageClient by lazy { Wearable.getMessageClient(this) }
+
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        messageClient.addListener(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -103,6 +112,23 @@ class PhoneMicService : Service() {
             NotificationManager.IMPORTANCE_LOW
         )
         nm.createNotificationChannel(channel)
+    }
+
+    override fun onMessageReceived(event: MessageEvent) {
+        if (event.path == PATH_AUDIO) {
+            val buffer = ByteBuffer.wrap(event.data)
+            val seq = buffer.int
+            val audio = ByteArray(buffer.remaining())
+            buffer.get(audio)
+            // Audio processing would occur here.
+            val ack = ByteBuffer.allocate(4).putInt(seq).array()
+            messageClient.sendMessage(event.sourceNodeId, PATH_ACK, ack)
+        }
+    }
+
+    override fun onDestroy() {
+        messageClient.removeListener(this)
+        super.onDestroy()
     }
 
     override fun onBind(intent: Intent?) = null

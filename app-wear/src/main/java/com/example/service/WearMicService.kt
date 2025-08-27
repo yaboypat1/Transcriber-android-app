@@ -11,6 +11,12 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.example.ui.MicTileService
+import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.wearable.MessageClient
+import com.google.android.gms.wearable.MessageEvent
+import com.google.android.gms.wearable.Wearable
+import com.google.android.gms.wearable.PutDataRequest
+import java.nio.ByteBuffer
 
 /**
  * Service responsible for capturing audio from the watch microphone. The
@@ -18,7 +24,7 @@ import com.example.ui.MicTileService
  * mute and stop actions. The notification and foreground service type are
  * configured to satisfy Android 14+ microphone requirements.
  */
-class WearMicService : Service() {
+class WearMicService : Service(), MessageClient.OnMessageReceivedListener {
     companion object {
         const val ACTION_START = "com.example.service.action.START"
         const val ACTION_STOP = "com.example.service.action.STOP"
@@ -26,6 +32,8 @@ class WearMicService : Service() {
 
         private const val CHANNEL_ID = "wear_mic"
         private const val NOTIFICATION_ID = 1
+        private const val PATH_AUDIO = "/audio"
+        private const val PATH_ACK = "/ack"
 
         @Volatile
         var isRunning: Boolean = false
@@ -34,9 +42,30 @@ class WearMicService : Service() {
 
     private var muted = false
 
+    private val messageClient by lazy { Wearable.getMessageClient(this) }
+    private val nodeClient by lazy { Wearable.getNodeClient(this) }
+    private var nodeId: String? = null
+    private val packetQueue = OpusPacketQueue { seq, data ->
+        val id = nodeId
+        if (id != null) {
+            val payload = ByteBuffer.allocate(4 + data.size).putInt(seq).put(data).array()
+            messageClient.sendMessage(id, PATH_AUDIO, payload)
+        } else {
+            packetQueue.setConnected(false)
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        messageClient.addListener(this)
+        try {
+            val nodes = Tasks.await(nodeClient.connectedNodes)
+            nodeId = nodes.firstOrNull()?.id
+            packetQueue.setConnected(nodeId != null)
+        } catch (e: Exception) {
+            packetQueue.setConnected(false)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -70,6 +99,19 @@ class WearMicService : Service() {
             startForeground(NOTIFICATION_ID, notification)
         }
         MicTileService.requestUpdate(this)
+    }
+
+    /** Queue an Opus packet for transmission to the phone. */
+    fun sendOpusPacket(data: ByteArray) {
+        packetQueue.queue(data)
+        // For large bursts fall back to the DataClient which persists data.
+        if (packetQueue.size() > 50) {
+            val combined = packetQueue.pendingPackets().fold(ByteArray(0)) { acc, arr ->
+                acc + arr
+            }
+            val request = PutDataRequest.create(PATH_AUDIO).setData(combined).setUrgent()
+            Wearable.getDataClient(this).putDataItem(request)
+        }
     }
 
     private fun updateNotification() {
@@ -115,8 +157,17 @@ class WearMicService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        messageClient.removeListener(this)
+        packetQueue.setConnected(false)
         isRunning = false
         MicTileService.requestUpdate(this)
+    }
+
+    override fun onMessageReceived(event: MessageEvent) {
+        if (event.path == PATH_ACK) {
+            val seq = ByteBuffer.wrap(event.data).int
+            packetQueue.ack(seq)
+        }
     }
 
     override fun onBind(intent: Intent?) = null
