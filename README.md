@@ -27,17 +27,43 @@ A "phone-in-pocket, watch-on-wrist" live translator. The Wear OS watch captures 
 - Partial transcripts can drive live captions; final segments are saved along with translation.
 - A WorkManager job can re-run segments with a larger model for better accuracy.
 
-## Status
+## Components
 
-The repository currently contains scaffolding for the wearable service, the phone listener, and a translation helper. Buffering, full ASR integration, Room storage, and the post-processing worker still need implementation.
+- **Jitter buffer** smooths incoming audio before recognition.
+- **Room entities** like `TranscriptSegment` persist transcripts.
+- **Post-process worker** revisits audio with a heavier ASR model.
+- **ML Kit Language ID** detects the spoken language prior to translation.
 
 ## Development
 
 This repository uses Gradle with a centralized version catalog at `gradle/libs.versions.toml`. Dependencies and plugin versions are referenced through the `libs` catalog in the build scripts.
+
+Install the phone and watch apps on paired devices:
+
+```
+./gradlew :app-mobile:installDebug :app-wear:installDebug
+```
+
+To pair a Wear OS emulator, use:
+
+```
+adb pair <emulator-ip>:<port>
+adb connect <emulator-ip>:<port>
+```
 
 Run tests with:
 
 ```
 ./gradlew test
 ```
+
+### Versions
+
+Key versions from `gradle/libs.versions.toml`:
+
+- Android Gradle Plugin 8.12.1
+- Kotlin 2.0.21
+- Compose BOM 2024.02.00 (compiler 1.5.10)
+- Room 2.6.1 and WorkManager 2.9.0
+- ML Kit language-id 17.0.4
 
