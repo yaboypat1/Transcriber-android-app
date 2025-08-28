@@ -1,18 +1,9 @@
 plugins {
-    id("com.android.application") version "8.12.1" apply false
-    id("com.android.library") version "8.12.1" apply false
-    id("org.jetbrains.kotlin.android") version "2.0.21" apply false
-}
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.12.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21")
-    }
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.kotlin.compose) apply false
 }
 
 allprojects {
