@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -30,7 +31,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 
     sourceSets {
@@ -54,37 +55,37 @@ repositories {
 
 dependencies {
     implementation(project(":app"))
-    implementation("com.google.mlkit:common:18.10.0")
-    implementation("com.google.mlkit:translate:17.0.1")
-    implementation("com.google.android.gms:play-services-wearable:18.0.0")
-    implementation("androidx.lifecycle:lifecycle-service:2.7.0")
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
-    implementation("androidx.core:core-ktx:1.12.0")
-    
+    implementation(libs.mlkit.common)
+    implementation(libs.mlkit.translate)
+    implementation(libs.play.services.wearable)
+    implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.core.ktx)
+
     // Compose dependencies
-    implementation(platform("androidx.compose:compose-bom:2024.02.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("androidx.activity:activity-ktx:1.8.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
     // Testing dependencies
     testImplementation(kotlin("test"))
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("junit:junit:4.13.2")
-    
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.junit4)
+
     // Android testing
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.02.00"))
-    
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+
     // Debug dependencies
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
 tasks.withType<Test> {

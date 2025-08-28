@@ -33,8 +33,11 @@ The repository currently contains scaffolding for the wearable service, the phon
 
 ## Development
 
-This repository uses Gradle. Run tests with:
+This repository uses Gradle with a centralized version catalog at `gradle/libs.versions.toml`. Dependencies and plugin versions are referenced through the `libs` catalog in the build scripts.
+
+Run tests with:
 
 ```
 ./gradlew test
 ```
+

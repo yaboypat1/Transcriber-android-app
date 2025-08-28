@@ -35,19 +35,19 @@ repositories {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
-    
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.work.runtime.ktx)
+
     // ML Kit dependencies
-    implementation("com.google.mlkit:common:18.10.0")
-    implementation("com.google.mlkit:language-id:17.0.4")
-    implementation("com.google.mlkit:translate:17.0.1")
-    
+    implementation(libs.mlkit.common)
+    implementation(libs.mlkit.language.id)
+    implementation(libs.mlkit.translate)
+
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    
+    implementation(libs.kotlinx.coroutines.android)
+
     testImplementation(kotlin("test"))
 }
