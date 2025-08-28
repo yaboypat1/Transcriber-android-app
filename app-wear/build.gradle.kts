@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.wear"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.wear"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
     }
