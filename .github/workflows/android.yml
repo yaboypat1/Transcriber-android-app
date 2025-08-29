@@ -1,5 +1,9 @@
 name: Android CI
 
+permissions:
+  contents: read
+  actions: read
+
 on:
   push:
     branches: [ main ]
@@ -19,7 +23,17 @@ jobs:
       - name: Gradle cache
         uses: gradle/actions/setup-gradle@v3
       - name: Lint and Test
-        run: ./gradlew ktlintCheck detekt lint test --stacktrace
+        run: |
+          ./gradlew ktlintCheck detekt lint test --stacktrace --console=plain | tee build.log
+      - name: Upload logs and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-and-reports
+          retention-days: 14
+          path: |
+            build.log
+            **/build/reports/**
       # - name: Upload SARIF (Android Lint)
       #   uses: github/codeql-action/upload-sarif@v3
       #   with:
@@ -37,7 +51,17 @@ jobs:
       - name: Gradle cache
         uses: gradle/actions/setup-gradle@v3
       - name: Assemble APKs
-        run: ./gradlew :app-mobile:assembleDebug :app-wear:assembleDebug --stacktrace
+        run: |
+          ./gradlew :app-mobile:assembleDebug :app-wear:assembleDebug --stacktrace --console=plain | tee build.log
+      - name: Upload logs and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-and-reports
+          retention-days: 14
+          path: |
+            build.log
+            **/build/reports/**
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
@@ -56,4 +80,3 @@ jobs:
   #         java-version: '21'
   #     - uses: gradle/actions/setup-gradle@v3
   #     - run: ./gradlew lint test
-
