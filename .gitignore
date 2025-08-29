@@ -1,8 +1,14 @@
 .gradle/
+
+# Gradle and IDE build outputs
 build/
 */build/
+
+# Prevent committing generated binaries
 bin/
 */bin/
+app-wear/bin/
+
 .kotlin/
 /codex
 local.properties
