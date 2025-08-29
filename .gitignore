@@ -14,3 +14,5 @@ app-wear/bin/
 
 # Android SDK path (do not commit)
 local.properties
+
+local.properties
