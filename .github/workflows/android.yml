@@ -1,4 +1,4 @@
-name: Android CI (self-hosted)
+name: Android CI
 
 on:
   push:
@@ -13,8 +13,8 @@ concurrency:
 
 jobs:
   build:
-    # Your runner should have these labels (see Section 3)
-    runs-on: [self-hosted, linux, android]
+    # Try self-hosted first, fall back to GitHub-hosted
+    runs-on: [self-hosted, ubuntu-latest]
     timeout-minutes: 45
 
     permissions:
@@ -32,8 +32,8 @@ jobs:
           java-version: '21'
           cache: gradle
 
-      # Make sure Android SDK is present and licenses accepted on the runner.
-      - name: Setup Android SDK (idempotent)
+      # Setup Android SDK
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
           packages: |
@@ -41,9 +41,12 @@ jobs:
             cmdline-tools;latest
             platforms;android-35
             build-tools;35.0.0
+            emulator
 
-      - name: Accept licenses (safe to re-run)
-        run: yes | sdkmanager --licenses
+      - name: Accept Android Licenses
+        run: |
+          yes | sdkmanager --licenses || true
+          yes | sdkmanager --update
         shell: bash
 
       # Validate and cache Gradle
