@@ -1,7 +1,6 @@
 package com.example.ui
 
 import android.content.Context
-<<<<<<< HEAD
 import androidx.wear.tiles.ActionBuilders
 import androidx.wear.tiles.LayoutElementBuilders
 import androidx.wear.tiles.ModifiersBuilders
@@ -10,22 +9,11 @@ import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TimelineBuilders
 import androidx.wear.tiles.TileService
-=======
-import android.content.Intent
-import androidx.wear.protolayout.ActionBuilders
-import androidx.wear.protolayout.LayoutElementBuilders
-import androidx.wear.protolayout.ModifiersBuilders
-import androidx.wear.protolayout.RequestBuilders
-import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.TileService
-import androidx.wear.protolayout.TileBuilders
->>>>>>> fb9df69ed72c58ee2bc168e83960bedd7bd752db
 import com.example.service.WearMicService
 import androidx.concurrent.futures.CallbackToFutureAdapter
 import com.google.common.util.concurrent.ListenableFuture
 
 /**
-<<<<<<< HEAD
  * Simple tile that toggles [WearMicService] on the watch. The tile displays a
  * Start or Stop label depending on the running state of the service and
  * launches a tiny activity that starts/stops the service when tapped.
@@ -38,17 +26,6 @@ class MicTileService : TileService() {
         CallbackToFutureAdapter.getFuture { completer ->
             val running = WearMicService.isRunning
             val label = if (running) "Stop" else "Start"
-=======
- * Simple tile that toggles [WearMicService] on the watch.
- * Uses the new protolayout API as recommended by Google.
- */
-class MicTileService : TileService() {
-
-    override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<TileBuilders.Tile> {
-        val running = WearMicService.isRunning
-        val label = if (running) "Stop" else "Start"
-        val action = if (running) WearMicService.ACTION_STOP else WearMicService.ACTION_START
->>>>>>> fb9df69ed72c58ee2bc168e83960bedd7bd752db
 
             val launch = ActionBuilders.LaunchAction.Builder()
                 .setAndroidActivity(
@@ -63,30 +40,18 @@ class MicTileService : TileService() {
                 .setOnClick(launch)
                 .build()
 
-<<<<<<< HEAD
             val text = LayoutElementBuilders.Text.Builder()
                 .setText(label)
                 .build()
-=======
-        val text = LayoutElementBuilders.Text.Builder()
-            .setText(label)
-            .build()
->>>>>>> fb9df69ed72c58ee2bc168e83960bedd7bd752db
 
             val box = LayoutElementBuilders.Box.Builder()
                 .setModifiers(ModifiersBuilders.Modifiers.Builder().setClickable(clickable).build())
                 .addContent(text)
                 .build()
 
-<<<<<<< HEAD
             val layout = LayoutElementBuilders.Layout.Builder()
                 .setRoot(box)
                 .build()
-=======
-        val layout = LayoutElementBuilders.Layout.Builder()
-            .setRoot(box)
-            .build()
->>>>>>> fb9df69ed72c58ee2bc168e83960bedd7bd752db
 
             val timeline = TimelineBuilders.Timeline.Builder()
                 .addTimelineEntry(
