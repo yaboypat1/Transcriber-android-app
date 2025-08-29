@@ -5,4 +5,4 @@ bin/
 */bin/
 .kotlin/
 /codex
-gradlew
+local.properties
