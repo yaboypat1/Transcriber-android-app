@@ -11,4 +11,6 @@ app-wear/bin/
 
 .kotlin/
 /codex
+
+# Android SDK path (do not commit)
 local.properties
