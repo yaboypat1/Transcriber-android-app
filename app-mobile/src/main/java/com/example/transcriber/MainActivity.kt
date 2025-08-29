@@ -424,17 +424,10 @@ fun TranscriptItem(transcript: TranscriptSegment) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 transcript.language?.let { lang ->
-<<<<<<< HEAD
-                    AssistChip(
-                        onClick = { },
-                        label = { Text(lang.uppercase(), fontSize = 12.sp) },
-                        colors = AssistChipDefaults.assistChipColors(
-=======
                     SuggestionChip(
                         onClick = {},
                         label = { Text(lang.uppercase(), fontSize = 12.sp) },
                         colors = SuggestionChipDefaults.suggestionChipColors(
->>>>>>> fb9df69ed72c58ee2bc168e83960bedd7bd752db
                             containerColor = MaterialTheme.colorScheme.secondaryContainer
                         )
                     )
