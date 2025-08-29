@@ -6,33 +6,27 @@ on:
   pull_request:
   workflow_dispatch:
 
-# Keep one run per branch
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
-    # Try self-hosted first, fall back to GitHub-hosted
-    runs-on: [self-hosted, ubuntu-latest]
+    runs-on: [self-hosted, linux, android]  # labels on your runner
     timeout-minutes: 45
 
     permissions:
       contents: read
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # JDK 21 for modern AGP/Gradle
-      - name: Set up Java
+      - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
-          cache: gradle
 
-      # Setup Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
@@ -41,29 +35,20 @@ jobs:
             cmdline-tools;latest
             platforms;android-35
             build-tools;35.0.0
-            emulator
 
       - name: Accept Android Licenses
-        run: |
-          yes | sdkmanager --licenses || true
-          yes | sdkmanager --update
-        shell: bash
+        run: yes | sdkmanager --licenses
 
-      # Validate and cache Gradle
       - name: Validate Gradle Wrapper
         uses: gradle/actions/wrapper-validation@v4
 
-      - name: Setup Gradle
+      - name: Setup Gradle (cache)
         uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-read-only: false
 
-      # Build the phone + watch apps; keep it lean
       - name: Assemble Debug variants
-        run: ./gradlew --no-daemon --stacktrace :app-mobile:assembleDebug :app-wear:assembleDebug
+        run: ./gradlew --no-daemon --stacktrace assembleDebug
 
-      # Run static analysis/tests
-      - name: Run unit tests & detekt
+      - name: Unit tests & detekt (if configured)
         run: ./gradlew --no-daemon --stacktrace test detekt || true
 
       - name: Upload APKs
@@ -72,5 +57,4 @@ jobs:
           name: debug-apks
           if-no-files-found: warn
           path: |
-            app-mobile/build/outputs/**/*.apk
-            app-wear/build/outputs/**/*.apk
+            **/build/outputs/**/*.apk
