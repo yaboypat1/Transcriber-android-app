@@ -1,0 +1,363 @@
+
+Welcome to Gradle 8.13!
+
+Here are the highlights of this release:
+ - Daemon JVM auto-provisioning
+ - Enhancements for Scala plugin and JUnit testing
+ - Improvements for build authors and plugin developers
+
+For more details see https://docs.gradle.org/8.13/release-notes.html
+
+Configuration on demand is an incubating feature.
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app-mobile:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app-wear:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app-mobile:preBuild UP-TO-DATE
+> Task :app-mobile:preDebugBuild UP-TO-DATE
+> Task :app-wear:preBuild UP-TO-DATE
+> Task :app-wear:preDebugBuild UP-TO-DATE
+> Task :app-wear:generateDebugResValues
+> Task :app-mobile:generateDebugResValues
+> Task :app-mobile:generateDebugResources
+> Task :app-wear:generateDebugResources
+> Task :app:mergeDebugJniLibFolders
+> Task :app-mobile:packageDebugResources
+> Task :app-wear:packageDebugResources
+> Task :app:mergeDebugNativeLibs NO-SOURCE
+> Task :app:stripDebugDebugSymbols NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateDebugResValues
+> Task :app:copyDebugJniLibsProjectAndLocalJars
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:extractDeepLinksForAarDebug
+> Task :app:mergeDebugShaders
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:parseDebugLocalResources
+> Task :app-wear:parseDebugLocalResources
+> Task :app-mobile:parseDebugLocalResources
+> Task :app:javaPreCompileDebug
+> Task :app:prepareDebugArtProfile
+> Task :app:prepareLintJarForPublish
+> Task :app:generateDebugRFile
+> Task :app:processDebugManifest
+> Task :app-wear:mapDebugSourceSetPaths
+> Task :app-wear:createDebugCompatibleScreenManifests
+> Task :app-wear:extractDeepLinksDebug
+> Task :app-wear:preDebugAndroidTestBuild SKIPPED
+> Task :app-wear:javaPreCompileDebug
+> Task :app-wear:generateDebugAndroidTestResValues
+> Task :app-wear:extractProguardFiles
+> Task :app-wear:preDebugUnitTestBuild UP-TO-DATE
+> Task :app-wear:javaPreCompileDebugUnitTest
+> Task :app-wear:mergeDebugResources
+> Task :app-wear:buildKotlinToolingMetadata
+> Task :app-wear:preReleaseBuild UP-TO-DATE
+> Task :app-wear:generateReleaseResValues
+> Task :app-wear:generateReleaseResources
+> Task :app-wear:packageReleaseResources
+> Task :app-wear:createReleaseCompatibleScreenManifests
+> Task :app-wear:parseReleaseLocalResources
+> Task :app-wear:extractDeepLinksRelease
+> Task :app-wear:preReleaseUnitTestBuild UP-TO-DATE
+> Task :app-wear:javaPreCompileRelease
+> Task :app-wear:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app-wear:javaPreCompileReleaseUnitTest
+> Task :app-wear:mergeDebugShaders
+> Task :app-wear:compileDebugShaders NO-SOURCE
+> Task :app-wear:generateDebugAssets UP-TO-DATE
+> Task :app-wear:mergeDebugAssets
+> Task :app-wear:desugarDebugFileDependencies
+> Task :app-wear:compressDebugAssets
+> Task :app-wear:mergeDebugJniLibFolders
+> Task :app-wear:checkDebugDuplicateClasses
+> Task :app-wear:validateSigningDebug
+> Task :app-mobile:mapDebugSourceSetPaths
+> Task :app-mobile:createDebugCompatibleScreenManifests
+> Task :app-mobile:extractDeepLinksDebug
+> Task :app-mobile:javaPreCompileDebug
+> Task :app-mobile:preDebugAndroidTestBuild SKIPPED
+> Task :app-mobile:generateDebugAndroidTestResValues
+> Task :app-mobile:extractProguardFiles
+> Task :app-mobile:preDebugUnitTestBuild UP-TO-DATE
+> Task :app-mobile:buildKotlinToolingMetadata
+> Task :app-mobile:preReleaseBuild UP-TO-DATE
+> Task :app-mobile:generateReleaseResValues
+> Task :app-mobile:generateReleaseResources
+> Task :app-mobile:packageReleaseResources
+> Task :app-mobile:createReleaseCompatibleScreenManifests
+> Task :app-mobile:extractDeepLinksRelease
+> Task :app-mobile:preReleaseUnitTestBuild UP-TO-DATE
+> Task :app-mobile:javaPreCompileReleaseUnitTest
+> Task :app-mobile:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app-mobile:javaPreCompileDebugUnitTest
+> Task :app-mobile:parseReleaseLocalResources
+> Task :app-mobile:javaPreCompileRelease
+> Task :app-mobile:mergeDebugShaders
+> Task :app-mobile:compileDebugShaders NO-SOURCE
+> Task :app-mobile:generateDebugAssets UP-TO-DATE
+> Task :app-mobile:mergeDebugAssets
+> Task :app-mobile:desugarDebugFileDependencies
+> Task :app-mobile:compressDebugAssets
+> Task :app-mobile:mergeDebugResources
+> Task :app-mobile:mergeDebugJniLibFolders
+> Task :app-mobile:validateSigningDebug
+> Task :app-mobile:writeDebugAppMetadata
+> Task :app-mobile:checkDebugDuplicateClasses
+> Task :app-mobile:writeDebugSigningConfigVersions
+> Task :app:writeDebugAarMetadata
+> Task :app:preDebugAndroidTestBuild UP-TO-DATE
+> Task :app:generateDebugAndroidTestResValues
+> Task :app:writeDebugLintModelMetadata
+> Task :app:extractProguardFiles
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:extractDeepLinksDebug
+> Task :app:compileDebugLibraryResources
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:generateReleaseResValues
+> Task :app:generateReleaseResources
+> Task :app:packageReleaseResources
+> Task :app:parseReleaseLocalResources
+> Task :app:javaPreCompileRelease
+> Task :app:preReleaseUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileReleaseUnitTest
+> Task :app:extractDeepLinksRelease
+> Task :app:writeReleaseAarMetadata
+> Task :app:javaPreCompileDebugUnitTest
+> Task :app:generateReleaseRFile
+> Task :app:processReleaseManifest
+> Task :app:generateDebugUnitTestStubRFile
+> Task :app:compileReleaseLibraryResources
+> Task :app:copyDebugJniLibsProjectOnly
+> Task :app:generateReleaseUnitTestStubRFile
+
+> Task :app:kaptGenerateStubsDebugKotlin
+w: Kapt currently doesn't support language version 2.0+. Falling back to 1.9.
+
+> Task :app:kaptGenerateStubsReleaseKotlin
+w: Kapt currently doesn't support language version 2.0+. Falling back to 1.9.
+
+> Task :app-wear:checkDebugAarMetadata
+
+> Task :app:kaptReleaseKotlin
+/home/patrick/Documents/projects/Transcriber-android-app/app/build/tmp/kapt3/stubs/release/com/example/storage/TranscriptRepository.java:53: warning: Schema export directory was not provided to the annotation processor so Room cannot export the schema. You can either provide `room.schemaLocation` annotation processor argument by applying the Room Gradle plugin (id 'androidx.room') OR set exportSchema to false.
+    public static abstract class TranscriptDatabase extends androidx.room.RoomDatabase {
+                           ^
+
+> Task :app:kaptDebugKotlin
+/home/patrick/Documents/projects/Transcriber-android-app/app/build/tmp/kapt3/stubs/debug/com/example/storage/TranscriptRepository.java:53: warning: Schema export directory was not provided to the annotation processor so Room cannot export the schema. You can either provide `room.schemaLocation` annotation processor argument by applying the Room Gradle plugin (id 'androidx.room') OR set exportSchema to false.
+    public static abstract class TranscriptDatabase extends androidx.room.RoomDatabase {
+                           ^
+
+> Task :app-wear:mergeExtDexDebug
+> Task :app-wear:processDebugMainManifest
+> Task :app-wear:processDebugManifest
+> Task :app-wear:mapReleaseSourceSetPaths
+> Task :app-wear:checkReleaseAarMetadata
+> Task :app-wear:processReleaseMainManifest
+> Task :app-wear:processReleaseManifest
+> Task :app-wear:mergeReleaseResources
+> Task :app-wear:writeDebugAppMetadata
+> Task :app-wear:writeDebugSigningConfigVersions
+> Task :app-wear:processDebugManifestForPackage
+> Task :app-wear:mergeDebugNativeLibs
+> Task :app-wear:processReleaseManifestForPackage
+
+> Task :app-wear:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: liblanguage_id_l2c_jni.so, libtranslate_jni.so. Run with --info option to learn more.
+
+> Task :app-wear:processDebugResources
+> Task :app-wear:processReleaseResources
+> Task :app:compileReleaseKotlin
+> Task :app:compileDebugKotlin
+> Task :app-mobile:mergeExtDexDebug
+> Task :app-mobile:checkDebugAarMetadata
+> Task :app-mobile:processDebugMainManifest
+> Task :app-mobile:processDebugManifest
+> Task :app-mobile:checkReleaseAarMetadata
+> Task :app-mobile:mapReleaseSourceSetPaths
+> Task :app-mobile:processReleaseMainManifest
+> Task :app-mobile:processReleaseManifest
+> Task :app-mobile:processReleaseManifestForPackage
+> Task :app-mobile:processDebugManifestForPackage
+> Task :app-mobile:mergeReleaseResources
+> Task :app-mobile:mergeDebugNativeLibs
+
+> Task :app-mobile:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, liblanguage_id_l2c_jni.so, libtranslate_jni.so. Run with --info option to learn more.
+
+> Task :app-mobile:processReleaseResources
+> Task :app-mobile:processDebugResources
+> Task :app:extractDebugAnnotations
+> Task :app:compileDebugJavaWithJavac
+> Task :app:mergeDebugGeneratedProguardFiles
+> Task :app:mergeDebugConsumerProguardFiles
+> Task :app:processDebugJavaRes
+> Task :app:bundleLibRuntimeToJarDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:generateDebugLintReportModel
+> Task :app:syncDebugLibJars
+> Task :app:bundleDebugLocalLintAar
+> Task :app:createFullJarDebug
+> Task :app:generateDebugAndroidTestLintModel
+> Task :app:generateDebugUnitTestLintModel
+> Task :app:generateDebugLintModel
+> Task :app:bundleLibCompileToJarDebug
+> Task :app:compileReleaseJavaWithJavac
+> Task :app:kaptGenerateStubsDebugUnitTestKotlin
+> Task :app:bundleLibRuntimeToJarRelease
+> Task :app:bundleLibCompileToJarRelease
+> Task :app:processReleaseJavaRes
+> Task :app:kaptDebugUnitTestKotlin
+> Task :app:kaptGenerateStubsReleaseUnitTestKotlin
+> Task :app:compileDebugUnitTestKotlin NO-SOURCE
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugUnitTestJavaRes NO-SOURCE
+> Task :app:testDebugUnitTest NO-SOURCE
+
+> Task :app-wear:compileDebugKotlin
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileActivity.kt:23:9 'fun overridePendingTransition(p0: Int, p1: Int): Unit' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:4:8 'class ActionBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:5:8 'class LayoutElementBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:6:8 'class ModifiersBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:7:8 'class ResourceBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:10:8 'class TimelineBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:30:26 'class ActionBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:32:21 'class ActionBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:39:29 'class ModifiersBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:43:24 'class LayoutElementBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:47:23 'class LayoutElementBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:48:31 'class ModifiersBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:52:26 'class LayoutElementBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:56:28 'class TimelineBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:58:21 'class TimelineBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:66:18 'fun setTimeline(p0: TimelineBuilders.Timeline): TileBuilders.Tile.Builder' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:73:18 This declaration overrides a deprecated member but is not marked as deprecated itself. Please add the '@Deprecated' annotation or suppress the diagnostic.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:77:23 'class ResourceBuilders : Any' is deprecated. Deprecated in Java.
+
+> Task :app-wear:compileDebugJavaWithJavac NO-SOURCE
+> Task :app-wear:bundleDebugClassesToCompileJar
+> Task :app:bundleLibRuntimeToDirDebug
+> Task :app:kaptReleaseUnitTestKotlin
+> Task :app:compileReleaseUnitTestKotlin NO-SOURCE
+> Task :app:compileReleaseUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processReleaseUnitTestJavaRes NO-SOURCE
+> Task :app:testReleaseUnitTest NO-SOURCE
+> Task :app:test UP-TO-DATE
+> Task :app-wear:generateDebugLintReportModel
+
+> Task :app-wear:compileReleaseKotlin
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileActivity.kt:23:9 'fun overridePendingTransition(p0: Int, p1: Int): Unit' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:4:8 'class ActionBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:5:8 'class LayoutElementBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:6:8 'class ModifiersBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:7:8 'class ResourceBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:10:8 'class TimelineBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:30:26 'class ActionBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:32:21 'class ActionBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:39:29 'class ModifiersBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:43:24 'class LayoutElementBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:47:23 'class LayoutElementBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:48:31 'class ModifiersBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:52:26 'class LayoutElementBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:56:28 'class TimelineBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:58:21 'class TimelineBuilders : Any' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:66:18 'fun setTimeline(p0: TimelineBuilders.Timeline): TileBuilders.Tile.Builder' is deprecated. Deprecated in Java.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:73:18 This declaration overrides a deprecated member but is not marked as deprecated itself. Please add the '@Deprecated' annotation or suppress the diagnostic.
+w: file:///home/patrick/Documents/projects/Transcriber-android-app/app-wear/src/main/kotlin/com/example/ui/MicTileService.kt:77:23 'class ResourceBuilders : Any' is deprecated. Deprecated in Java.
+
+> Task :app-wear:generateDebugAndroidTestLintModel
+> Task :app-wear:generateDebugUnitTestLintModel
+> Task :app-wear:bundleDebugClassesToRuntimeJar
+> Task :app-wear:processDebugJavaRes
+> Task :app-wear:compileReleaseJavaWithJavac NO-SOURCE
+> Task :app-wear:bundleReleaseClassesToRuntimeJar
+> Task :app-wear:bundleReleaseClassesToCompileJar
+> Task :app-wear:processReleaseJavaRes
+> Task :app-wear:dexBuilderDebug
+> Task :app-mobile:mergeLibDexDebug
+> Task :app-wear:compileDebugUnitTestKotlin
+> Task :app-wear:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app-wear:mergeDebugGlobalSynthetics
+> Task :app-wear:processDebugUnitTestJavaRes
+> Task :app-wear:compileReleaseUnitTestKotlin
+> Task :app-wear:testDebugUnitTest
+> Task :app-wear:compileReleaseUnitTestJavaWithJavac NO-SOURCE
+> Task :app-wear:processReleaseUnitTestJavaRes
+> Task :app-mobile:compileDebugKotlin
+> Task :app-mobile:compileDebugJavaWithJavac NO-SOURCE
+> Task :app-mobile:bundleDebugClassesToCompileJar
+> Task :app-mobile:compileReleaseKotlin
+> Task :app-wear:testReleaseUnitTest
+> Task :app-wear:test
+> Task :app-wear:mergeLibDexDebug
+> Task :app-wear:mergeProjectDexDebug
+> Task :app-wear:mergeDebugJavaResource
+> Task :app-wear:packageDebug
+> Task :app-wear:createDebugApkListingFileRedirect
+> Task :app-wear:assembleDebug
+> Task :app:lintAnalyzeDebugUnitTest
+> Task :app:lintAnalyzeDebugAndroidTest
+> Task :app-wear:lintAnalyzeDebugAndroidTest
+> Task :app-wear:lintAnalyzeDebugUnitTest
+> Task :app-mobile:generateDebugLintReportModel
+> Task :app-mobile:generateDebugAndroidTestLintModel
+> Task :app-mobile:generateDebugUnitTestLintModel
+> Task :app-mobile:bundleDebugClassesToRuntimeJar
+> Task :app-mobile:processDebugJavaRes
+> Task :app-mobile:compileReleaseJavaWithJavac NO-SOURCE
+> Task :app-mobile:bundleReleaseClassesToRuntimeJar
+> Task :app-mobile:processReleaseJavaRes
+> Task :app-mobile:bundleReleaseClassesToCompileJar
+> Task :app-mobile:dexBuilderDebug
+> Task :app-mobile:mergeDebugGlobalSynthetics
+> Task :app-mobile:mergeProjectDexDebug
+> Task :app-mobile:compileReleaseUnitTestKotlin
+> Task :app-mobile:compileReleaseUnitTestJavaWithJavac NO-SOURCE
+> Task :app-mobile:compileDebugUnitTestKotlin
+> Task :app-mobile:processReleaseUnitTestJavaRes
+> Task :app-mobile:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app-mobile:processDebugUnitTestJavaRes
+> Task :app-mobile:mergeDebugJavaResource
+> Task :app-mobile:testDebugUnitTest
+> Task :app-mobile:lintAnalyzeDebugAndroidTest
+> Task :app-mobile:testReleaseUnitTest
+> Task :app-mobile:test
+> Task :app-mobile:lintAnalyzeDebugUnitTest
+> Task :app-mobile:packageDebug
+> Task :app-mobile:createDebugApkListingFileRedirect
+> Task :app-mobile:assembleDebug
+> Task :app:lintAnalyzeDebug
+
+> Task :app:lintReportDebug
+Wrote HTML report to file:///home/patrick/Documents/projects/Transcriber-android-app/app/build/reports/lint-results-debug.html
+Lint found 2 errors and 37 warnings. First failure:
+/home/patrick/Documents/projects/Transcriber-android-app/app/src/main/java/com/example/audio/AudioProcessor.kt:54: Error: Call requires permission which may be rejected by user: code should explicitly check to see if permission is available (with checkPermission) or explicitly handle a potential SecurityException [MissingPermission]
+            audioRecord = AudioRecord.Builder()
+                          ^
+
+
+> Task :app:lintDebug FAILED
+Lint found 2 errors, 37 warnings. First failure:
+
+/home/patrick/Documents/projects/Transcriber-android-app/app/src/main/java/com/example/audio/AudioProcessor.kt:54: Error: Call requires permission which may be rejected by user: code should explicitly check to see if permission is available (with checkPermission) or explicitly handle a potential SecurityException [MissingPermission]
+            audioRecord = AudioRecord.Builder()
+                          ^
+
+The full lint text report is located at:
+  /home/patrick/Documents/projects/Transcriber-android-app/app/build/intermediates/lint_intermediate_text_report/debug/lintReportDebug/lint-results-debug.txt
+
+> Task :app-wear:lintAnalyzeDebug
+> Task :app-mobile:lintAnalyzeDebug
+
+[Incubating] Problems report is available at: file:///home/patrick/Documents/projects/Transcriber-android-app/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+214 actionable tasks: 214 executed

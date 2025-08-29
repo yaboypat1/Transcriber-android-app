@@ -18,12 +18,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 
     buildFeatures {
@@ -73,6 +73,11 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit4)
+    testImplementation("org.robolectric:robolectric:4.12.1")
+    testImplementation("androidx.test:core:1.5.0")
+    testImplementation("androidx.work:work-testing:2.9.0")
+    testImplementation("androidx.room:room-testing:2.6.1")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.10.2")
 
     // Android testing
     androidTestImplementation(libs.androidx.test.ext.junit)

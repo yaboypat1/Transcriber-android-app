@@ -14,7 +14,7 @@ import com.example.ui.MicTileService
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
-import com.google.android.gms.wearable.PutDataRequest
+import com.google.android.gms.wearable.ChannelClient
 import java.nio.ByteBuffer
 import com.example.service.OpusPacketQueue
 
@@ -44,6 +44,7 @@ class WearMicService : Service(), MessageClient.OnMessageReceivedListener {
 
     private val messageClient by lazy { Wearable.getMessageClient(this) }
     private val nodeClient by lazy { Wearable.getNodeClient(this) }
+    private val channelClient by lazy { Wearable.getChannelClient(this) }
     private var nodeId: String? = null
     private var packetQueue: OpusPacketQueue? = null
 
@@ -108,13 +109,27 @@ class WearMicService : Service(), MessageClient.OnMessageReceivedListener {
     /** Queue an Opus packet for transmission to the phone. */
     fun sendOpusPacket(data: ByteArray) {
         packetQueue?.queue(data)
-        // For large bursts fall back to the DataClient which persists data.
+        // For large bursts, stream via ChannelClient for lower latency
         if ((packetQueue?.size() ?: 0) > 50) {
             val combined = (packetQueue?.pendingPackets() ?: emptyList()).fold(ByteArray(0)) { acc, arr ->
                 acc + arr
             }
-            val request = PutDataRequest.create(PATH_AUDIO).setData(combined).setUrgent()
-            Wearable.getDataClient(this).putDataItem(request)
+            streamLargePayload(combined)
+        }
+    }
+
+    private fun streamLargePayload(bytes: ByteArray) {
+        val id = nodeId ?: return
+        channelClient.openChannel(id, PATH_AUDIO).addOnSuccessListener { channel ->
+            channelClient.getOutputStream(channel).addOnSuccessListener { os ->
+                try {
+                    os.use { it.write(bytes) }
+                } catch (_: Exception) {
+                    // Ignore; queue will retry on next connection
+                } finally {
+                    channelClient.close(channel)
+                }
+            }
         }
     }
 

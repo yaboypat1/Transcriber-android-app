@@ -2,44 +2,58 @@ name: Android CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  lint-and-test:
+    runs-on: [self-hosted, ubuntu, android]
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up JDK 21
+      - name: Setup JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
-          cache: gradle
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+      - name: Lint and Test
+        run: ./gradlew ktlintCheck detekt lint test --stacktrace
+      # - name: Upload SARIF (Android Lint)
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: app/build/reports/lint-results-debug.sarif
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Run checks
-        run: ./gradlew lint ktlintCheck test :app-mobile:assembleDebug :app-wear:assembleDebug
-
-      - name: Upload phone debug APK
-        if: always()
+  assemble:
+    runs-on: [self-hosted, ubuntu, android]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+      - name: Assemble APKs
+        run: ./gradlew :app-mobile:assembleDebug :app-wear:assembleDebug --stacktrace
+      - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
-          name: app-mobile-debug-apk
-          path: app-mobile/build/outputs/apk/debug/*.apk
+          name: artifacts
+          path: |
+            app-mobile/build/outputs/apk/debug/*.apk
+            app-wear/build/outputs/apk/debug/*.apk
 
-      - name: Upload wear debug APK
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-wear-debug-apk
-          path: app-wear/build/outputs/apk/debug/*.apk
+  # github-hosted-example:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-java@v4
+  #       with:
+  #         distribution: temurin
+  #         java-version: '21'
+  #     - uses: gradle/actions/setup-gradle@v3
+  #     - run: ./gradlew lint test
 
-      - name: Publish Android Lint SARIF
-        if: always()
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: '**/lint-results-*.sarif'

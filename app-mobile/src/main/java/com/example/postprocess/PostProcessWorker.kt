@@ -78,10 +78,9 @@ class PostProcessWorker(
 
             WorkManager.getInstance(context).enqueueUniqueWork(
                 "post_process_" + sessionId,
-                ExistingWorkPolicy.REPLACE,
+                ExistingWorkPolicy.APPEND_OR_REPLACE,
                 request
             )
         }
     }
 }
-

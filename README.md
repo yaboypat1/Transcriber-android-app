@@ -2,6 +2,13 @@
 
 A "phone-in-pocket, watch-on-wrist" live translator. The Wear OS watch captures audio continuously and streams it to the paired phone where speech recognition, language identification, and translation run on-device. Final transcripts are stored for later review and can be reprocessed with a larger model when the phone is charging.
 
+## Status
+
+- Features: JitterBuffer, Room (TranscriptSegment), WorkManager post-processing, on-device ML Kit Language ID, Wear ↔ Phone pairing via MessageClient with ChannelClient streaming for bursts.
+- One-command build: `./gradlew :app-mobile:assembleDebug :app-wear:assembleDebug`
+- Lint/analysis: ktlint + Detekt wired into `check`
+- CI: `.github/workflows/android.yml` for self-hosted runner (Ubuntu, Android)
+
 ## Architecture
 
 ```
@@ -19,7 +26,7 @@ A "phone-in-pocket, watch-on-wrist" live translator. The Wear OS watch captures 
 
 - Foreground service with microphone service type.
 - Uses WebRTC VAD to skip silence and encodes 16 kHz mono audio with Opus.
-- Sends small packets through the Wear OS Data Layer to the phone.
+- Sends small packets via `MessageClient`, and uses `ChannelClient` for large bursts with backpressure.
 
 ### Phone (`app-mobile`)
 
@@ -54,6 +61,7 @@ adb connect <emulator-ip>:<port>
 Run tests with:
 
 ```
+./gradlew ktlintFormat detekt
 ./gradlew test
 ```
 
@@ -61,9 +69,16 @@ Run tests with:
 
 Key versions from `gradle/libs.versions.toml`:
 
-- Android Gradle Plugin 8.12.1
-- Kotlin 2.0.21
-- Compose BOM 2024.02.00 (compiler 1.5.10)
-- Room 2.6.1 and WorkManager 2.9.0
-- ML Kit language-id 17.0.4
+- Android Gradle Plugin: 8.12.1
+- Gradle Wrapper: 8.13
+- Kotlin: 2.0.21 (JDK 21 toolchain)
+- Compose BOM: 2024.10.00 (compiler via Kotlin Compose plugin 2.0.21)
+- Room: 2.6.1
+- WorkManager: 2.9.0
+- ML Kit language-id: 17.0.4
 
+### Troubleshooting
+
+- Ensure JDK 21 is installed and selected: `java -version`
+- Android SDK: set `sdk.dir` in `local.properties`
+- Self-hosted runner labels: `self-hosted`, `ubuntu`, `android`
